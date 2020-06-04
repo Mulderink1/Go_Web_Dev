@@ -45,6 +45,7 @@ func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, _ ht
 
 	// store the user
 	uc.session[u.Id] = u
+	models.StoreUsers(uc.session)
 
 	uj, err := json.Marshal(u)
 	if err != nil {
@@ -60,6 +61,8 @@ func (uc UserController) DeleteUser(w http.ResponseWriter, r *http.Request, p ht
 	id := p.ByName("id")
 
 	delete(uc.session, id)
+
+	models.StoreUsers(uc.session)
 
 	w.WriteHeader(http.StatusOK) // 200
 	fmt.Fprint(w, "Deleted user", id, "\n")
